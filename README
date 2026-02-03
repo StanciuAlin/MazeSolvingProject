@@ -1,0 +1,29 @@
+4. Analysis and Comparison
+For each algorithm, analyze and compare:
+•
+number of expanded nodes
+•
+solution depth
+•
+execution time (when applicable)
+•
+whether the solution is optimal
+The results must be presented using:
+•
+comparative tables and/or
+•
+simple graphs
+
+
+project_root/
+│
+├── main.py               # Punctul de intrare (rularea experimentelor și afișarea tabelelor) [cite: 40, 41]
+├── maze_engine.py        # Clasa Maze și gestionarea hărții [cite: 12, 14]
+├── algorithms/           # Folder dedicat algoritmilor (Extensibilitate/Open-Closed) [cite: 18]
+│   ├── __init__.py       # Face folderul un pachet Python
+│   ├── base.py           # Clasa abstractă SearchAlgorithm și structura Node [cite: 55]
+│   ├── bfs.py            # Implementarea Breadth-First Search [cite: 20]
+│   ├── dfs.py            # Implementarea Depth-First Search [cite: 21]
+│   └── astar.py          # Implementarea A* [cite: 22]
+└── utils/
+    └── analyzer.py       # Colectarea metricilor și generarea tabelelor/graficelor [cite: 29, 30]

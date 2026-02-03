@@ -1,0 +1,21 @@
+# --- Python environment ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# --- IDE & Editor specific ---
+.vscode/
+.idea/
+*.swp
+
+# --- Data & Logs ---
+*.log
+.DS_Store (pentru Mac)
+Thumbs.db (pentru Windows)
+
+# --- Dacă lucrezi cu Jupyter Notebooks ---
+.ipynb_checkpoints
