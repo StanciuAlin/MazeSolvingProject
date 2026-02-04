@@ -70,7 +70,7 @@ def run_experiment(grid, start, goal):
     if not results:
         print("\n" + "-" * 50)
         print(
-            f"{Colors.BOLD}{Colors.YELLOW}[WARNING]{Colors.END} Trap detected \n Neither algorithm found a solution! There is no path from START to TARGET.")
+            f"{Colors.BOLD}{Colors.YELLOW}[WARNING]{Colors.END} Trap detected \n Neither algorithm found a solution! There is no path from Tom to Jerry.")
         print("-" * 62)
     else:
         # View the path found by each algorithm
@@ -99,7 +99,7 @@ def get_coordinates(grid, label):
     while True:
         try:
             print(
-                f"\n{Colors.BOLD}--- Set {label} Node Coordinates ---{Colors.END}")
+                f"\n{Colors.BOLD}--- Set {label} Coordinates ---{Colors.END}")
             x = int(input(f"{Colors.BOLD}>> Enter X: {Colors.END} "))
             y = int(input(f"{Colors.BOLD}>> Enter Y:{Colors.END} "))
             if InputHandler.is_valid_point(grid, x, y):
@@ -109,8 +109,24 @@ def get_coordinates(grid, label):
 
 
 def main():
+    description = 3 * '\n' + f"""
+        {Colors.BOLD}{Colors.CYAN}\tREAL-WORLD SCENARIO: THE CHASE\n{Colors.END}
+{Colors.BLUE}Tom is hungry and needs to find the shortest path to Jerry,
+who is hiding somewhere in the house. The house is a complex 
+maze of corridors and obstacles (furniture). 
+
+Tom must choose his strategy wisely:
+- Should he explore every room systematically ({Colors.END}{Colors.YELLOW}BFS{Colors.END}{Colors.BLUE})?
+- Should he rush blindly into the deepest corners ({Colors.END}{Colors.YELLOW}DFS{Colors.END}{Colors.BLUE})?
+- Or should he use his sense of smell to estimate the distance 
+to Jerry and find the most efficient route ({Colors.END}{Colors.YELLOW}A* / Greedy{Colors.END}{Colors.BLUE})?
+
+Help Tom reach Jerry before it's too late!{Colors.END}
+        """
+    print(description)
+
     while True:
-        print(3 * '\n' + 23 * f"{Colors.BOLD}{Colors.HEADER}={Colors.END}" +
+        print(2 * '\n' + 23 * f"{Colors.BOLD}{Colors.HEADER}={Colors.END}" +
               f"{Colors.BOLD}{Colors.HEADER} AI MAZE SOLVER {Colors.END}" +
               23 * f"{Colors.BOLD}{Colors.HEADER}={Colors.END}" + "\n")
         print(
@@ -126,8 +142,8 @@ def main():
         if choice == '1':
             grid, _, _ = InputHandler.get_manual_input()
             if grid:
-                start = get_coordinates(grid, "START")
-                target = get_coordinates(grid, "TARGET")
+                start = get_coordinates(grid, "Tom (START)")
+                target = get_coordinates(grid, "Jerry (TARGET)")
                 run_experiment(grid, start, target)
 
         elif choice == '2':
@@ -147,8 +163,8 @@ def main():
                 filename = os.path.join(folder, files[f_idx])
                 grid = InputHandler.load_from_file(filename)
 
-                start = get_coordinates(grid, "START")
-                target = get_coordinates(grid, "TARGET")
+                start = get_coordinates(grid, "Tom (START)")
+                target = get_coordinates(grid, "Jerry (TARGET)")
                 run_experiment(grid, start, target)
             except (ValueError, IndexError):
                 print("Invalid selection!")
@@ -173,9 +189,9 @@ def main():
 
                 # Force start and goal to be paths in case of overlapping
                 print(
-                    f"\n{Colors.BOLD}Set the START and TARGET positions:{Colors.END}")
-                start = get_coordinates(grid, "START")
-                goal = get_coordinates(grid, "TARGET")
+                    f"\n{Colors.BOLD}Set Tom and Jerry positions:{Colors.END}")
+                start = get_coordinates(grid, "Tom (START)")
+                goal = get_coordinates(grid, "Jerry (TARGET)")
 
                 run_experiment(grid, start, goal)
             except ValueError:
