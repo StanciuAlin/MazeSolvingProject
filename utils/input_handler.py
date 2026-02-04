@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 
 class InputHandler:
@@ -45,6 +46,32 @@ class InputHandler:
         except ValueError:
             print("Error: Please enter valid integer values.")
             return None, None, None
+
+    @staticmethod
+    def is_valid_point(grid, x, y):
+        """
+        Check if the point (x, y) is within the grid bounds and not a wall.
+        """
+        rows = len(grid)
+        cols = len(grid[0])
+        if 0 <= x < rows and 0 <= y < cols:
+            if grid[x][y] == 0:
+                return True
+            else:
+                print(f"Error: Position ({x}, {y}) is a WALL (#).")
+                return False
+        print(
+            f"Error: Position ({x}, {y}) is out of bounds ({rows}x{cols}).")
+        return False
+
+    @staticmethod
+    def generate_random_maze(rows, cols, obstacle_prob=0.25):
+        """
+        Generate a random maze grid of given dimensions. Each cell has a probability of being an obstacle (wall).
+        """
+        grid = [[1 if random.random() < obstacle_prob else 0 for _ in range(cols)]
+                for _ in range(rows)]
+        return grid
 
     @staticmethod
     def visualize_input(grid, start, goal):

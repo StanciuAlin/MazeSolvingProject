@@ -33,42 +33,81 @@ def run_experiment(grid, start, goal):
     analyzer.plot_comparison()
 
 
+def get_coordinates(grid, label):
+    """
+    Prompt user for valid coordinates (x, y) within the grid for a given label.
+    """
+    while True:
+        try:
+            print(f"\n--- Config/Set {label} ---")
+            x = int(input(f"Enter X {label}: "))
+            y = int(input(f"Enter Y {label}: "))
+            if InputHandler.is_valid_point(grid, x, y):
+                return (x, y)
+        except ValueError:
+            print("Error: Please enter valid integer values.")
+
+
 def main():
     while True:
         print(23 * "=" + " AI MAZE SOLVER " + 23 * "=" + "\n")
         print("1. Manual Input (Grid dimensions, Walls, Start/Target Nodes)")
         print("2. Read from file (Including start/target)")
+        print("3. Random Maze Generation")
         print("3. Exit")
         print(62 * "=")
 
         choice = input("\nChoose an option: ")
 
         if choice == '1':
-            grid, start, goal = InputHandler.get_manual_input()
+            grid, _, _ = InputHandler.get_manual_input()
             if grid:
-                run_experiment(grid, start, goal)
+                start = get_coordinates(grid, "START")
+                target = get_coordinates(grid, "TARGET")
+                run_experiment(grid, start, target)
 
         elif choice == '2':
             folder = 'inputs/'
             files = [f for f in os.listdir(folder) if f.endswith('.txt')]
+            if not files:
+                print("No file found in inputs folder!")
+                continue
+
             print("\nAvailable files:")
             for idx, f in enumerate(files):
                 print(f"{idx + 1}. {f}")
 
-            f_idx = int(input("\nChoose the file index: ")) - 1
-            filename = os.path.join(folder, files[f_idx])
+            try:
+                f_idx = int(input("\nChoose the file index: ")) - 1
+                filename = os.path.join(folder, files[f_idx])
+                grid = InputHandler.load_from_file(filename)
 
-            grid = InputHandler.load_from_file(filename)
-            # For option 2, we ask for start/goal after loading the grid
-            print("\nEnter start and goal coordinates:")
-            sx = int(input("X Start: "))
-            sy = int(input("Y Start: "))
-            gx = int(input("X Target: "))
-            gy = int(input("Y Target: "))
-
-            run_experiment(grid, (sx, sy), (gx, gy))
+                start = get_coordinates(grid, "START")
+                target = get_coordinates(grid, "TARGET")
+                run_experiment(grid, start, target)
+            except (ValueError, IndexError):
+                print("Invalid selection!")
 
         elif choice == '3':
+            try:
+                r = int(input("Number of rows: "))
+                c = int(input("Number of columns: "))
+                prob = float(
+                    input("Obstacle probability (e.g. 0.2 for 20%): "))
+
+                grid = InputHandler.generate_random_maze(r, c, prob)
+
+                # Force start and goal to be paths in case of overlapping
+                print("\nSet the START and TARGET positions:")
+                start = get_coordinates(grid, "START")
+                goal = get_coordinates(grid, "TARGET")
+
+                run_experiment(grid, start, goal)
+            except ValueError:
+                print(
+                    "Error: Please enter valid integer values for dimensions and a float for probability.")
+
+        elif choice == '4':
             print("Exit ...")
             break
         else:
