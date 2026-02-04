@@ -39,6 +39,7 @@ $$h(n) = |x_{current} - x_{goal}| + |y_{current} - y_{goal}|$$
 
 1. **Prerequisites**: Ensure you have Python installed on your system.
 2. **Install Dependencies**: Use the provided `requirements.txt` to install the necessary libraries (`numpy` and `matplotlib`):
+
    ```
    pip install -r requirements.txt
    ```

@@ -7,7 +7,7 @@ class DFS(SearchAlgorithm):
         start_time = time.perf_counter()
         expanded_nodes = 0
 
-        # Stiva pentru DFS (LIFO)
+        # (LIFO)
         stack = [Node(start_pos)]
         visited = {start_pos}
 

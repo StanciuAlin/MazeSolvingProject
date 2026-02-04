@@ -11,10 +11,10 @@ class Greedy(SearchAlgorithm):
         start_time = time.perf_counter()
         expanded_nodes = 0
 
-        # Priority Queue bazat doar pe h(n)
+        # Priority Queue based on only h(n)
         open_list = []
         h_start = self._get_h(start_pos, goal_pos)
-        # Atenție: setăm f = h pentru ca heapq să sorteze după euristică
+        # Set f = h so that heapq sorts by heuristic only
         heapq.heappush(open_list, (h_start, Node(start_pos, h=h_start)))
         visited = {start_pos}
 

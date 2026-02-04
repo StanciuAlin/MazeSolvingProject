@@ -8,20 +8,23 @@ class AStar(SearchAlgorithm):
         self.heuristic_type = heuristic_type
 
     def _get_h(self, pos, goal_pos):
-        """Calculează euristica: Distanța Manhattan."""
+        """
+        Computes the heuristic value (h) based on the selected heuristic type.
+        Uses Manhattan distance.
+        """
         return abs(pos[0] - goal_pos[0]) + abs(pos[1] - goal_pos[1])
 
     def solve(self, maze, start_pos, goal_pos):
         start_time = time.perf_counter()
         expanded_nodes = 0
 
-        # Coada de priorități (Priority Queue)
+        # Priority Queue
         open_list = []
         start_node = Node(start_pos, None, g=0,
                           h=self._get_h(start_pos, goal_pos))
         heapq.heappush(open_list, start_node)
 
-        # Dicționar pentru a urmări cel mai mic cost g găsit pentru fiecare poziție
+        # Dict to track the lowest g cost found for each position
         visited_costs = {start_pos: 0}
 
         while open_list:
@@ -34,7 +37,7 @@ class AStar(SearchAlgorithm):
                 )
 
             for neighbor_pos in maze.get_neighbors(current_node.position):
-                # Costul de la start la vecin este costul părintelui + 1
+                # The cost from start to neighbor is parent's cost + 1
                 new_g = current_node.g + 1
 
                 if neighbor_pos not in visited_costs or new_g < visited_costs[neighbor_pos]:

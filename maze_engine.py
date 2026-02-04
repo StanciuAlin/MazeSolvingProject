@@ -1,7 +1,8 @@
 class Maze:
     def __init__(self, grid):
         """
-        grid: Matrice (listă de liste) unde 0 = drum, 1 = zid.
+        Grid: List[List[int]]
+            0 is path, 1 is wall
         """
         self.grid = grid
         self.rows = len(grid)
@@ -9,20 +10,20 @@ class Maze:
 
     def is_valid_move(self, position):
         """
-        Verifică dacă o poziție este în interiorul matricii și nu este un zid.
+        Check if a position is within matrix bounds and not a wall.
         """
         x, y = position
-        return (0 <= x < self.rows and 
-                0 <= y < self.cols and 
+        return (0 <= x < self.rows and
+                0 <= y < self.cols and
                 self.grid[x][y] == 0)
 
     def get_neighbors(self, position):
         """
-        Returnează vecinii accesibili (Sus, Jos, Stânga, Dreapta).
+        Return a list of valid neighboring positions. (Up, Down, Left, Right)
         """
         x, y = position
         neighbors = []
-        # Direcții: Sus, Jos, Stânga, Dreapta
+        # Directions:   Up,      Down,   Left,    Right
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
             new_pos = (x + dx, y + dy)
             if self.is_valid_move(new_pos):

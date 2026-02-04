@@ -11,7 +11,9 @@ class Analyzer:
         self.results = []
 
     def run_tests(self):
-        """Rulează toți algoritmii și colectează datele."""
+        """
+        Runs all algorithms on the maze and collects results.
+        """
         for algo in self.algorithms:
             res = algo.solve(self.maze, self.start, self.goal)
             if res:
@@ -19,7 +21,9 @@ class Analyzer:
         return self.results
 
     def plot_comparison(self):
-        """Generează graficele cerute în cerințe."""
+        """
+        Generates a comparative bar chart of expanded nodes and solution depth for each algorithm.
+        """
         names = [res['algorithm'] for res in self.results]
         expanded = [res['expanded_nodes'] for res in self.results]
         depth = [res['solution_depth'] for res in self.results]
@@ -29,20 +33,20 @@ class Analyzer:
 
         fig, ax1 = plt.subplots(figsize=(10, 6))
 
-        # Grafic pentru Noduri Expandate
+        # The graphic for Expanded Nodes
         rects1 = ax1.bar(x - width/2, expanded, width,
-                         label='Noduri Expandate', color='skyblue')
-        ax1.set_ylabel('Număr Noduri')
-        ax1.set_title('Comparație Performanță Algoritmi')
+                         label='Expanded Nodes', color='skyblue')
+        ax1.set_ylabel('Number of Nodes')
+        ax1.set_title('Performance Comparison of Algorithms')
         ax1.set_xticks(x)
         ax1.set_xticklabels(names)
         ax1.legend(loc='upper left')
 
-        # Grafic secundar pentru Adâncimea Soluției
+        # Secondary graphic for Solution Depth
         ax2 = ax1.twinx()
         rects2 = ax2.bar(x + width/2, depth, width,
-                         label='Adâncime Soluție', color='orange')
-        ax2.set_ylabel('Adâncime (pași)')
+                         label='Solution Depth', color='orange')
+        ax2.set_ylabel('Solution Depth (steps)')
         ax2.legend(loc='upper right')
 
         plt.tight_layout()
