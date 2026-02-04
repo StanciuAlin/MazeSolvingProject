@@ -138,8 +138,8 @@ class InputHandler:
 
         if expanded_nodes_list:
             ex_x, ex_y = zip(*expanded_nodes_list)
-            plt.scatter(ex_y, ex_x, c='yellow', s=10,
-                        label='Explored', alpha=0.3)
+            plt.scatter(ex_y, ex_x, c='lime', s=15,
+                        label='Explored', alpha=0.5)
 
         if path and len(path) > 0:
             px, py = zip(*path)

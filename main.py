@@ -100,7 +100,7 @@ def get_coordinates(grid, label):
         try:
             print(
                 f"\n{Colors.BOLD}--- Set {label} Coordinates ---{Colors.END}")
-            x = int(input(f"{Colors.BOLD}>> Enter X: {Colors.END} "))
+            x = int(input(f"{Colors.BOLD}>> Enter X: {Colors.END}"))
             y = int(input(f"{Colors.BOLD}>> Enter Y:{Colors.END} "))
             if InputHandler.is_valid_point(grid, x, y):
                 return (x, y)
