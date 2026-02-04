@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+from algorithms.base import Colors
 
 
 class InputHandler:
@@ -24,27 +25,33 @@ class InputHandler:
         Allow the user to manually input the maze grid, start, and goal positions.
         """
         try:
-            rows = int(input("Enter number of rows: "))
-            cols = int(input("Enter number of columns: "))
+            rows = int(
+                input(f"{Colors.BOLD}>> Enter number of rows:{Colors.END} "))
+            cols = int(
+                input(f"{Colors.BOLD}>> Enter number of columns:{Colors.END} "))
 
-            print("Enter the grid (use '.' for path and '#' for walls):")
+            print(
+                f"{Colors.BOLD}Enter the grid (use '.' for path and '#' for walls):{Colors.END}")
             grid = []
             for i in range(rows):
-                row_str = input(f"Row {i}: ").strip()
+                row_str = input(
+                    f"{Colors.BOLD}>> Row {i}:{Colors.END} ").strip()
                 while len(row_str) != cols:
                     print(
-                        f"Error: Row must have exactly {cols} characters.")
-                    row_str = input(f"Row {i}: ").strip()
+                        f"{Colors.RED}{Colors.BOLD}[Error]{Colors.END} Row must have exactly {cols} characters.")
+                    row_str = input(
+                        f"{Colors.BOLD}>> Row {i}:{Colors.END} ").strip()
                 grid.append([1 if char == '#' else 0 for char in row_str])
 
-            start_x = int(input("X Start: "))
-            start_y = int(input("Y Start: "))
-            goal_x = int(input("X Target: "))
-            goal_y = int(input("Y Target: "))
+            start_x = int(input(f"{Colors.BOLD}>> X Start:{Colors.END} "))
+            start_y = int(input(f"{Colors.BOLD}>> Y Start:{Colors.END} "))
+            goal_x = int(input(f"{Colors.BOLD}>> X Target:{Colors.END} "))
+            goal_y = int(input(f"{Colors.BOLD}>> Y Target:{Colors.END} "))
 
             return grid, (start_x, start_y), (goal_x, goal_y)
         except ValueError:
-            print("Error: Please enter valid integer values.")
+            print(
+                f"{Colors.RED}{Colors.BOLD}[Error]{Colors.END} Please enter valid integer values.")
             return None, None, None
 
     @staticmethod
@@ -58,10 +65,11 @@ class InputHandler:
             if grid[x][y] == 0:
                 return True
             else:
-                print(f"Error: Position ({x}, {y}) is a WALL (#).")
+                print(
+                    f"{Colors.RED}{Colors.BOLD}[Error]{Colors.END} Position ({x}, {y}) is a WALL (#).")
                 return False
         print(
-            f"Error: Position ({x}, {y}) is out of bounds ({rows}x{cols}).")
+            f"{Colors.RED}{Colors.BOLD}[Error]{Colors.END} Position ({x}, {y}) is out of bounds ({rows}x{cols}).")
         return False
 
     @staticmethod
@@ -72,6 +80,33 @@ class InputHandler:
         grid = [[1 if random.random() < obstacle_prob else 0 for _ in range(cols)]
                 for _ in range(rows)]
         return grid
+
+    @staticmethod
+    def get_free_points(grid, count=5):
+        """
+        Return a list of free (path) points in the grid.
+        """
+        free_points = []
+        for r, row in enumerate(grid):
+            for c, value in enumerate(row):
+                if value == 0:
+                    free_points.append((r, c))
+
+        # Return a random sample of free points if there are enough
+        import random
+        return random.sample(free_points, min(len(free_points), count))
+
+    @staticmethod
+    def print_grid_to_terminal(grid):
+        """
+            Print the maze grid to the terminal (as a preview).
+        """
+        print(f"\n{Colors.BOLD}Maze Preview ( . = Path, # = Wall):\n{Colors.END}")
+        header = "   " + "".join([str(i % 10) for i in range(len(grid[0]))])
+        print(header)
+        for i, row in enumerate(grid):
+            row_str = "".join(['.' if cell == 0 else '#' for cell in row])
+            print(f"{i:<3}{row_str}")
 
     @staticmethod
     def visualize_input(grid, start, goal):
@@ -106,9 +141,14 @@ class InputHandler:
             plt.scatter(ex_y, ex_x, c='yellow', s=10,
                         label='Explored', alpha=0.3)
 
-        if path:
+        if path and len(path) > 0:
             px, py = zip(*path)
             plt.plot(py, px, color='red', linewidth=3, label='The path found')
+        else:
+            # Show "PATH NOT FOUND" message in the center of the maze
+            plt.text(len(grid[0])//2, len(grid)//2, "PATH NOT FOUND",
+                     color="red", fontsize=20, fontweight="bold",
+                     ha="center", va="center", bbox=dict(facecolor='white', alpha=0.7))
 
         plt.title(title)
         plt.legend()

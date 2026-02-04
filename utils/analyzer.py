@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from algorithms.base import Colors
 
 
 class Analyzer:
@@ -24,6 +25,13 @@ class Analyzer:
         """
         Generates a comparative bar chart of expanded nodes and solution depth for each algorithm.
         """
+
+        if not self.results:
+            print("-" * 62)
+            print(
+                f"\n{Colors.BOLD}{Colors.YELLOW}[WARNING]{Colors.END} Neither algorithm found a solution.\n The graphic analysis was canceled.")
+            return
+
         names = [res['algorithm'] for res in self.results]
         expanded = [res['expanded_nodes'] for res in self.results]
         depth = [res['solution_depth'] for res in self.results]
@@ -51,3 +59,23 @@ class Analyzer:
 
         plt.tight_layout()
         plt.show()
+
+    def print_summary_table(self):
+        """
+        Prints a summary table of results for all algorithms.
+        """
+        if not self.results:
+            return
+
+        print("\n" + "="*90)
+        print(f"{Colors.BOLD}{'ALGORITHM':<25} | {'EXP. NODES':<12} | {'DEPTH':<10} | {'TIME (ms)':<12} | {'IS OPTIMAL?'}{Colors.END}")
+        print("-" * 90)
+
+        for res in self.results:
+            color = Colors.GREEN if res['is_optimal'] else Colors.YELLOW
+            optim_text = "YES" if res['is_optimal'] else "NO"
+            time_ms = res['execution_time'] * 1000
+            print(f"{color}{res['algorithm']:<25}{Colors.END} | {res['expanded_nodes']:<12} | "
+                  f"{res['solution_depth']:<10} | {time_ms:<12.4f} | {color}{optim_text}{Colors.END}")
+
+        print("=" * 90 + "\n")

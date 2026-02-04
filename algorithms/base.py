@@ -1,5 +1,18 @@
 from abc import ABC, abstractmethod
 import time
+import math
+
+
+class Colors:
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'  # Reset color
 
 
 class Node:
@@ -43,3 +56,29 @@ class SearchAlgorithm(ABC):
             path.append(current.position)
             current = current.parent
         return path[::-1]  # Invert the path to get it from start to goal
+
+
+class UninformedSearchAlgorithm(SearchAlgorithm):
+    """
+    This is a base class for BFS and DFS algorithms.
+    """
+    pass
+
+
+class InformedSearchAlgorithm(SearchAlgorithm):
+    """
+    This is a base class for A* and Greedy algorithms.
+    """
+
+    def __init__(self, heuristic_type="manhattan"):
+        self.heuristic_type = heuristic_type
+
+    def _get_h(self, pos, goal_pos):
+        """
+        Computes the heuristic value (h) based on the selected heuristic type.
+        Uses Manhattan distance by default or Euclidean distance if specified.
+        """
+        if self.heuristic_type == "euclidean":
+            return math.sqrt((pos[0] - goal_pos[0])**2 + (pos[1] - goal_pos[1])**2)
+
+        return abs(pos[0] - goal_pos[0]) + abs(pos[1] - goal_pos[1])
